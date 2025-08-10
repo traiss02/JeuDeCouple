@@ -112,7 +112,7 @@ npm start
 
 ## 🤝 Contribution
 
-Développé avec ❤️ par Issouf Traore. 
+Développé avec ❤️ par traiss02. Les contributions sont les bienvenues ! 
 
 Suggestions d'améliorations :
 - Nouvelles catégories de questions
