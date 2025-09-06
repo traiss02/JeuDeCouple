@@ -1,3 +1,6 @@
+
+<img width="1044" height="873" alt="Capture d’écran 2025-09-06 à 12 58 07" src="https://github.com/user-attachments/assets/54c5204c-5d9d-43cd-ac57-9625bf39b51b" />
+
 # 💕 Jeu de Couple - Application Interactive
 
 Une application web moderne conçue pour renforcer les liens entre couples à travers des questions profondes et des activités amusantes.
