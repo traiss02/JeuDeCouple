@@ -1,16 +1,31 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Heart, Shuffle, Home } from 'lucide-react';
 
+interface Card {
+  question: string;
+  type: 'question' | 'activity';
+}
+
+interface Category {
+  title: string;
+  subtitle: string;
+  cards: Card[];
+}
+
+interface Categories {
+  [key: string]: Category;
+}
+
 const CoupleGameApp = () => {
-  const [mode, setMode] = useState('home'); // 'home', 'category', 'game'
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [cards, setCards] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [currentPlayer, setCurrentPlayer] = useState(1); // 1 ou 2
+  const [mode, setMode] = useState<'home' | 'category' | 'game'>('home');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [cards, setCards] = useState<Card[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(1);
   const [playerNames, setPlayerNames] = useState({ player1: '', player2: '' });
 
   // Catégories de cartes prédéfinies
-  const categories = {
+  const categories: Categories = {
     discovery: {
       title: "Découverte 💫",
       subtitle: "Apprenez à vous connaître en profondeur",
@@ -37,7 +52,7 @@ const CoupleGameApp = () => {
         { question: "Créez ensemble une liste de 5 endroits à visiter en amoureux", type: "activity" },
         { question: "Quel est ton langage d'amour principal ?", type: "question" },
         { question: "Décris le moment où tu as su que tu étais amoureux/se", type: "question" },
-        { question: "Inventez un surnom mignon l'un pour l'autre", type: "activity" },
+        { question: "Inventez un surnom mignon l&apos;un pour l&apos;autre", type: "activity" },
         { question: "Quelle chanson vous fait penser à votre relation ?", type: "question" },
         { question: "Massage des mains pendant 2 minutes", type: "activity" },
         { question: "Regardez-vous dans les yeux pendant 30 secondes sans parler", type: "activity" }
@@ -77,7 +92,7 @@ const CoupleGameApp = () => {
     }
   };
 
-  const startGame = (categoryKey) => {
+  const startGame = (categoryKey: string) => {
     const category = categories[categoryKey];
     const shuffledCards = [...category.cards].sort(() => Math.random() - 0.5);
     setCards(shuffledCards);
@@ -110,17 +125,29 @@ const CoupleGameApp = () => {
     setCurrentIndex(0);
   };
 
-  const handleKeyPress = (e) => {
-    if (mode === 'game') {
-      if (e.key === 'ArrowLeft') previousCard();
-      if (e.key === 'ArrowRight') nextCard();
-    }
-  };
-
   React.useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [mode, currentIndex, cards.length]);
+    const keyHandler = (e: KeyboardEvent) => {
+      if (mode === 'game') {
+        if (e.key === 'ArrowLeft') {
+          if (currentIndex > 0) {
+            setCurrentIndex(currentIndex - 1);
+            setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
+          }
+        }
+        if (e.key === 'ArrowRight') {
+          if (currentIndex < cards.length - 1) {
+            setCurrentIndex(currentIndex + 1);
+            setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
+          } else {
+            setMode('category');
+          }
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', keyHandler);
+    return () => window.removeEventListener('keydown', keyHandler);
+  }, [mode, currentIndex, cards.length, currentPlayer]);
 
   // Écran d'accueil
   if (mode === 'home') {
@@ -191,7 +218,7 @@ const CoupleGameApp = () => {
               onClick={() => setMode('home')}
               className="text-white/80 hover:text-white transition-colors underline"
             >
-              ← Retour à l'accueil
+              ← Retour à l&apos;accueil
             </button>
           </div>
         </div>
@@ -214,7 +241,7 @@ const CoupleGameApp = () => {
               <h3 className="text-xl font-semibold">{categories[selectedCategory].title}</h3>
             </div>
             <p className="text-lg">
-              C'est au tour de <span className="font-bold text-yellow-300">{currentPlayerName}</span>
+              C&apos;est au tour de <span className="font-bold text-yellow-300">{currentPlayerName}</span>
             </p>
           </div>
 
